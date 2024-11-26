@@ -14,6 +14,7 @@ type Storage interface {
 	Open(ctx context.Context, path string) (io.ReadCloser, error)
 	OpenWithStat(ctx context.Context, path string) (io.ReadCloser, *Stat, error)
 	Delete(ctx context.Context, path string) error
+	URL(ctx context.Context, path string) (string, error) // return a signed URL
 }
 
 // Stat contains metadata about content stored in storage.

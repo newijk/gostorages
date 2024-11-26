@@ -18,4 +18,5 @@ func (noop) Open(ctx context.Context, path string) (io.ReadCloser, error)   { re
 func (noop) OpenWithStat(ctx context.Context, path string) (io.ReadCloser, *Stat, error) {
 	return nil, nil, nil
 }
-func (noop) Delete(ctx context.Context, path string) error { return nil }
+func (noop) Delete(ctx context.Context, path string) error        { return nil }
+func (noop) URL(ctx context.Context, path string) (string, error) { return "", nil }

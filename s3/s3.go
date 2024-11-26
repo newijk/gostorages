@@ -3,6 +3,11 @@ package s3
 import (
 	"bytes"
 	"context"
+	"io"
+	"mime"
+	"net/http"
+	"path/filepath"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -10,10 +15,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/pkg/errors"
 	"github.com/ulule/gostorages"
-	"io"
-	"mime"
-	"net/http"
-	"path/filepath"
 )
 
 type CustomAPIHTTPClient interface {
@@ -165,4 +166,15 @@ func (s *Storage) OpenWithStat(ctx context.Context, path string) (io.ReadCloser,
 		ModifiedTime: *out.LastModified,
 		Size:         out.ContentLength,
 	}, nil
+}
+
+// Get a presigned url for the path
+func (s *Storage) URL(ctx context.Context, path string) (string, error) {
+	presignClient := s3.NewPresignClient(s.s3)
+	input := &s3.GetObjectInput{
+		Bucket: aws.String(s.bucket),
+		Key:    aws.String(path),
+	}
+	presignedUrl, err := presignClient.PresignGetObject(ctx, input)
+	return presignedUrl.URL, err
 }

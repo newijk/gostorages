@@ -85,3 +85,7 @@ func (g *Storage) OpenWithStat(ctx context.Context, path string) (io.ReadCloser,
 		Size:         r.Attrs.Size,
 	}, errors.WithStack(err)
 }
+
+func (fs *Storage) URL(ctx context.Context, path string) (string, error) {
+	panic("Not implemented")
+}
